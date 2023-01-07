@@ -46,23 +46,11 @@ public class OutputFile {
         bufferedWriter = new BufferedWriter(fileWriter);
     }
 
-    public void writeHead() throws Exception {
-        Field[] fields = this.getClass().getDeclaredFields();// get the field name list
-        String head = fields[0].getName();
-        for (int i = 1; i < fields.length; i++) { // joint the fields generate head string
-            head += "\t" + fields[i].getName();
-        }
-        head += "\n";
+    public void writeHead(String head) throws Exception {
         bufferedWriter.write(head);
     }
 
-    public void writeLine() throws Exception {
-        Field[] fields = this.getClass().getDeclaredFields();// get the field name list
-        String line = (String) fields[0].get(this);
-        for (int i = 1; i < fields.length; i++) { // joint the fields generate line string
-            line += "\t" + fields[i].get(this);
-        }
-        line += "\n";
+    public void writeLine(String line) throws Exception {
         bufferedWriter.write(line);
     }
 

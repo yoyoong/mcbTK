@@ -9,9 +9,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-public class BedFile implements InputFile{
+public class BedFile {
     public static final Logger log = LoggerFactory.getLogger(BedFile.class);
 
     File bedFile;
@@ -20,12 +19,6 @@ public class BedFile implements InputFile{
         bedFile = new File(bedPath);
     }
 
-    @Override
-    public List<?> parseByRegion(Region region) throws Exception {
-        return null;
-    }
-
-    @Override
     public List<Region> parseWholeFile() throws Exception {
         List<Region> regionList = new ArrayList<>();
         BufferedReader bufferedReader = new BufferedReader(new FileReader(bedFile));
@@ -40,24 +33,5 @@ public class BedFile implements InputFile{
             regionList.add(region);
         }
         return regionList;
-    }
-
-    @Override
-    public Map<?, ?> parseWholeFileGroupByChr() throws Exception {
-        return null;
-    }
-
-    public List<String> getLineList() throws Exception {
-        List<String> lineList = new ArrayList<>();
-        BufferedReader bufferedReader = new BufferedReader(new FileReader(bedFile));
-        String bedLine = "";
-        while ((bedLine = bufferedReader.readLine()) != null && !bedLine.equals("")) {
-            lineList.add(bedLine);
-        }
-        return lineList;
-    }
-
-    @Override
-    public void close() {
     }
 }

@@ -86,7 +86,7 @@ public class Main {
             realValue += " " + haoma.toArray()[i];
         }
 
-        return realValue;
+        return realValue.trim();
     }
 
     private static StatArgs parseStat(String[] args) throws ParseException {
