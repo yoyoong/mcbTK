@@ -24,7 +24,6 @@ public class Stat {
     public void stat(StatArgs statArgs) throws Exception {
         log.info("command.stat start!");
         args = statArgs;
-
         ChipFile chipFile = new ChipFile(args.getInput());
         BedFile bedFile = new BedFile(args.getBed());
 
