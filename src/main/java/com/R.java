@@ -63,30 +63,16 @@ public class R {
                     Double[] dataArray1 = chipInfoList.get(i).getDataArray();
                     Double[] dataArray2 = chipInfoList.get(j).getDataArray();
 
-                    // filter the NaN value
-                    double[] dataArray1ForCalculate = new double[dataArray1.length];
-                    double[] dataArray2ForCalculate = new double[dataArray2.length];
-                    int index = 0;
-                    for (int k = 0; k < dataArray1.length; k++) {
-                        if (!dataArray1[k].isNaN() && !dataArray2[k].isNaN()) {
-                            dataArray1ForCalculate[index] = dataArray1[k];
-                            dataArray2ForCalculate[index] = dataArray2[k];
-                            index++;
-                        }
-                    }
-                    if (index < args.getNSample()) {
+                    // calculate the r value
+                    Double rvalue = util.calculateRvalue(dataArray1, dataArray2, args.getNSample());
+                    if (rvalue.isNaN()) {
                         log.info("The count of sample which data is not NA in " + region.getChrom() + "\t" +
                                 cpgPos1 + "\t" + cpgPos2 + " is less than nSample");
                         continue;
                     }
 
-                    // calculate the r value
-                    PearsonsCorrelation pearsonsCorrelation = new PearsonsCorrelation();
-                    double rvalue = pearsonsCorrelation.correlation(dataArray1ForCalculate, dataArray2ForCalculate);
-                    double r2 = rvalue * rvalue;
-
                     // write the output file
-                    String line = region.getChrom() + "\t" + cpgPos1 + "\t" + cpgPos2 + "\t" + r2 + "\n";
+                    String line = region.getChrom() + "\t" + cpgPos1 + "\t" + cpgPos2 + "\t" + rvalue + "\n";
                     outputFile.writeLine(line);
                 }
             }

@@ -40,7 +40,7 @@ public class MainTest extends TestCase {
         String arg5 = "-sampleID";
         String arg6 = "";
         String arg7 = "-nSample";
-        String arg8 = "335";
+        String arg8 = "20";
         String[] args = {arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8};
 
         System.out.println("Work direqtory: " + System.getProperty("user.dir"));

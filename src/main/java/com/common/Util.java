@@ -1,5 +1,6 @@
 package com.common;
 
+import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,5 +24,27 @@ public class Util {
             }
         }
         return -1;
+    }
+
+    public Double calculateRvalue(Double[] array1, Double[] array2, Integer nSample) {
+        // filter the NaN value
+        double[] dataArray1ForCalculate = new double[array1.length];
+        double[] dataArray2ForCalculate = new double[array2.length];
+        int index = 0;
+        for (int k = 0; k < array1.length; k++) {
+            if (!array1[k].isNaN() && !array2[k].isNaN()) {
+                dataArray1ForCalculate[index] = array1[k];
+                dataArray2ForCalculate[index] = array2[k];
+                index++;
+            }
+        }
+        if (index < nSample) {
+            return Double.NaN;
+        }
+
+        // calculate the pearsons correlation
+        PearsonsCorrelation pearsonsCorrelation = new PearsonsCorrelation();
+        Double rvalue = pearsonsCorrelation.correlation(dataArray1ForCalculate, dataArray2ForCalculate);
+        return rvalue;
     }
 }
