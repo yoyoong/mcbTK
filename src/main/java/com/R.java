@@ -25,7 +25,6 @@ public class R {
     public void r(RArgs rArgs) throws Exception {
         log.info("command.r start!");
         args = rArgs;
-        ChipFile chipFile = new ChipFile(args.getInput());
 
         // check the command
         boolean checkResult = checkArgs();
@@ -33,6 +32,9 @@ public class R {
             log.error("Checkargs fail, please check the command.");
             return;
         }
+
+        // init the object
+        ChipFile chipFile = new ChipFile(args.getInput());
 
         // get the region list from region or bedfile
         List<Region> regionList = new ArrayList<>();

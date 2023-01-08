@@ -1,5 +1,7 @@
 package com.common;
 
+import com.bean.ChipInfo;
+import com.bean.Region;
 import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +26,14 @@ public class Util {
             }
         }
         return -1;
+    }
+
+    public List<Integer> getCpgPosListInRegion(List<ChipInfo> chipInfoList, Region region) {
+        List<Integer> cpgPosListInRegion = new ArrayList<>();
+        for (ChipInfo chipInfo : chipInfoList) {
+            cpgPosListInRegion.add(chipInfo.getStart());
+        }
+        return cpgPosListInRegion;
     }
 
     public Double calculateRvalue(Double[] array1, Double[] array2, Integer nSample) {

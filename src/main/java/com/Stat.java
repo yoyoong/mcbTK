@@ -24,6 +24,15 @@ public class Stat {
     public void stat(StatArgs statArgs) throws Exception {
         log.info("command.stat start!");
         args = statArgs;
+
+        // check the command
+        boolean checkResult = checkArgs();
+        if (!checkResult) {
+            log.error("Checkargs fail, please check the command.");
+            return;
+        }
+
+        // init the object
         ChipFile chipFile = new ChipFile(args.getInput());
         BedFile bedFile = new BedFile(args.getBed());
 
@@ -31,13 +40,6 @@ public class Stat {
         List<Region> regionList = bedFile.parseWholeFile();
         if (regionList.size() < 1) {
             log.info("The region list in bedfile is null, please check!");
-        }
-
-        // check the command
-        boolean checkResult = checkArgs();
-        if (!checkResult) {
-            log.error("Checkargs fail, please check the command.");
-            return;
         }
 
         // create the output file and write the head
