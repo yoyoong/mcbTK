@@ -13,6 +13,8 @@ public class MCBViewArgs implements Serializable {
     public String sampleID = "";
     @Annotation("minimal number of samples that cover the CpGs for R calculation [20]")
     public Integer nSample = 20;
+    @Annotation("output format,pdf or png [pdf]")
+    public String outFormat = "pdf"; // output format,pdf or png [pdf]
 
     public String getInput() {
         return input;
@@ -44,5 +46,13 @@ public class MCBViewArgs implements Serializable {
 
     public void setNSample(Integer nSample) {
         this.nSample = nSample;
+    }
+
+    public String getOutFormat() {
+        return outFormat;
+    }
+
+    public void setOutFormat(String outFormat) {
+        this.outFormat = outFormat;
     }
 }

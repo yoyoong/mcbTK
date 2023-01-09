@@ -52,17 +52,17 @@ public class CustomXYBlockRenderer extends XYBlockRenderer {
             z = ((XYZDataset)dataset).getZValue(series, item);
         }
 
-        Double blockWidth = dataArea.getWidth() / this.blockNum;
-        Double halfBlockWidth = dataArea.getWidth() / this.blockNum / 2;
+        Double blockWidth = dataArea.getWidth() * 0.95 / this.blockNum;
+        Double halfBlockWidth = dataArea.getWidth() * 0.95 / this.blockNum / 2;
                 
-        int xa = (int) (dataArea.getX() * 1.05 + halfBlockWidth + blockWidth * x + halfBlockWidth * y);
-        int xb = (int) (dataArea.getX() * 1.05 + blockWidth * x + halfBlockWidth * y);
-        int xc = (int) (dataArea.getX() * 1.05 + halfBlockWidth + blockWidth * x + halfBlockWidth * y);
-        int xd = (int) (dataArea.getX() * 1.05 + blockWidth + blockWidth * x + halfBlockWidth * y);
-        int ya = (int) (dataArea.getY() + halfBlockWidth / Math.sqrt(3) * y);
-        int yb = (int) (dataArea.getY() + halfBlockWidth / Math.sqrt(3) + (halfBlockWidth / Math.sqrt(3)) * y);
-        int yc = (int) (dataArea.getY() + blockWidth / Math.sqrt(3) + (halfBlockWidth / Math.sqrt(3)) * y);
-        int yd = (int) (dataArea.getY() + halfBlockWidth / Math.sqrt(3) + (halfBlockWidth / Math.sqrt(3)) * y);
+        int xa = (int) (dataArea.getWidth() * 0.03 + blockWidth + blockWidth * x + halfBlockWidth * y);
+        int xb = (int) (dataArea.getWidth() * 0.03 + halfBlockWidth + blockWidth * x + halfBlockWidth * y);
+        int xc = (int) (dataArea.getWidth() * 0.03 + blockWidth + blockWidth * x + halfBlockWidth * y);
+        int xd = (int) (dataArea.getWidth() * 0.03 + halfBlockWidth + blockWidth + blockWidth * x + halfBlockWidth * y);
+        int ya = (int) (dataArea.getY() * 1.02 + halfBlockWidth / Math.sqrt(3) * y);
+        int yb = (int) (dataArea.getY() * 1.02 + halfBlockWidth / Math.sqrt(3) + (halfBlockWidth / Math.sqrt(3)) * y);
+        int yc = (int) (dataArea.getY() * 1.02 + blockWidth / Math.sqrt(3) + (halfBlockWidth / Math.sqrt(3)) * y);
+        int yd = (int) (dataArea.getY() * 1.02 + halfBlockWidth / Math.sqrt(3) + (halfBlockWidth / Math.sqrt(3)) * y);
         int [] xPos = {xa, xb, xc, xd};
         int [] yPos = {ya, yb, yc, yd};
         g2.drawPolygon(xPos, yPos, 4);

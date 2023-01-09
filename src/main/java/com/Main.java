@@ -201,7 +201,12 @@ public class Main {
                 if (commandLine.hasOption("sampleID")) {
                     mcbViewArgs.setSampleID(getStringFromMultiValueParameter(commandLine, "sampleID"));
                 }
-                mcbViewArgs.setNSample(Integer.valueOf(String.valueOf(commandLine.getOptionValue("nSample"))));
+                if (commandLine.hasOption("nSample")) {
+                    mcbViewArgs.setNSample(Integer.valueOf(String.valueOf(commandLine.getOptionValue("nSample"))));
+                }
+                if (commandLine.hasOption("outFormat")) {
+                    mcbViewArgs.setOutFormat(getStringFromMultiValueParameter(commandLine, "outFormat"));
+                }
             }
         } else {
             System.out.println("The parameter is null");

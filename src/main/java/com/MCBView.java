@@ -27,8 +27,11 @@ import org.jfree.data.xy.DefaultXYZDataset;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
 import java.io.*;
 import java.util.*;
 import java.util.List;
@@ -99,8 +102,13 @@ public class MCBView {
         List<Integer> heightList = new ArrayList<>();
         heightList.add(width * 2 / 3);
         heightList.add(width / 3);
-        String outputPath = region.toFileString() + ".mcbView.pdf";
-        saveAsPdf(cpgPosListInRegion, region, plotList, outputPath, width, heightList);
+        String outputPath = region.toFileString() + ".mcbView." + args.getOutFormat();
+        if (args.getOutFormat().equals("pdf")) {
+            saveAsPdf(cpgPosListInRegion, region, plotList, outputPath, width, heightList);
+        } else if (args.getOutFormat().equals("png")) {
+            saveAsPng(cpgPosListInRegion, region, plotList, outputPath, width, heightList);
+        }
+
 
         log.info("command.mcbView end!");
     }
@@ -139,24 +147,21 @@ public class MCBView {
 
         // xy轴
         NumberAxis xAxis = new NumberAxis();
-        xAxis.setUpperMargin(0);
-        xAxis.setLowerMargin(0);
+        xAxis.setLowerMargin(0.025);
+        xAxis.setUpperMargin(0.025);
         xAxis.setVisible(false);
 
         NumberAxis yAxis = new NumberAxis();
-        yAxis.setTickUnit(new NumberTickUnit(dataMatrix.length * 2)); // 不让它显示y轴
+        yAxis.setTickUnit(new NumberTickUnit(dataMatrix.length * 2));
         yAxis.setRange(new Range(1, dataMatrix.length));
-        yAxis.setVisible(true);
+        yAxis.setVisible(false); // 不显示y轴
         yAxis.setLabel("sample");
         yAxis.setLabelFont(new Font("", Font.PLAIN, 20));
 
         // 颜色定义
-        LookupPaintScale paintScale = new LookupPaintScale(-1, 1, Color.black);
-        for (Double j = 0.0; j < 255.0; j+=0.1) {
-            paintScale.add((j - 255) / 255, new Color(j.intValue(), j.intValue(), 255));
-        }
-        for (Double j = 255.0; j < 510.0; j+=0.1) {
-            paintScale.add((j - 255) / 255, new Color(255, 510 - j.intValue(), 510 - j.intValue()));
+        LookupPaintScale paintScale = new LookupPaintScale(0, 1, Color.black);
+        for (Double j = 0.0; j < 255.0; j++) {
+            paintScale.add((255 - j) / 255, new Color((int) (255.0 - j / 3 * 2), (int) (255.0 - j / 3 * 2), j.intValue()));
         }
 
         // 绘制色块图
@@ -196,11 +201,13 @@ public class MCBView {
 
         // xy轴
         NumberAxis xAxis = new NumberAxis();
+        xAxis.setUpperMargin(0.05);
+        xAxis.setLowerMargin(0.05);
         xAxis.setVisible(false);
         NumberAxis yAxis = new NumberAxis();
-        yAxis.setTickUnit(new NumberTickUnit(rowNum * 2)); // 不让它显示y轴
+        yAxis.setTickUnit(new NumberTickUnit(rowNum * 2));
         yAxis.setRange(new Range(1, rowNum));
-        yAxis.setVisible(true);
+        yAxis.setVisible(false); // 不显示y轴
         yAxis.setLabel("rvalue");
         yAxis.setLabelFont(new Font("", Font.PLAIN, 20));
 
@@ -258,7 +265,22 @@ public class MCBView {
         for (int i = 0; i < plotList.size(); i++) {
             JFreeChart jFreeChart = new JFreeChart("", null, plotList.get(i), false);
             if (i == 0) {
-                jFreeChart = new JFreeChart(region.toHeadString(), new Font("", Font.PLAIN, sumHeight / 30), plotList.get(i), false);
+                // 图标头
+                jFreeChart = new JFreeChart(region.toHeadString(), new Font("", Font.PLAIN, sumHeight / 50), plotList.get(i), false);
+
+                // 颜色定义
+                LookupPaintScale paintScale = new LookupPaintScale(0, 1, Color.black);
+                for (Double j = 0.0; j < 255.0; j++) {
+                    paintScale.add((255 - j) / 255, new Color((int) (255.0 - j / 3 * 2), (int) (255.0 - j / 3 * 2), j.intValue()));
+                }
+
+                // 颜色示意图
+                PaintScaleLegend paintScaleLegend = new PaintScaleLegend(paintScale, new NumberAxis());
+                paintScaleLegend.setStripWidth(width * 0.01);
+                paintScaleLegend.setPosition(RectangleEdge.RIGHT);
+                paintScaleLegend.setAxisLocation(AxisLocation.BOTTOM_OR_RIGHT);
+                paintScaleLegend.setMargin(heightList.get(i) * 1 / 2, 0, heightList.get(i) * 1 / 4, 0);
+                jFreeChart.addSubtitle(paintScaleLegend);
             } else if (i == plotList.size() - 1) {
                 // 颜色定义
                 LookupPaintScale paintScale = new LookupPaintScale(-1, 1, Color.black);
@@ -271,11 +293,10 @@ public class MCBView {
 
                 // 颜色示意图
                 PaintScaleLegend paintScaleLegend = new PaintScaleLegend(paintScale, new NumberAxis());
-                Integer stripWidth = width / cpgPosListInRegion.size() / 5;
-                paintScaleLegend.setStripWidth(stripWidth);
+                paintScaleLegend.setStripWidth(width * 0.01);
                 paintScaleLegend.setPosition(RectangleEdge.RIGHT);
                 paintScaleLegend.setAxisLocation(AxisLocation.BOTTOM_OR_RIGHT);
-                paintScaleLegend.setMargin(heightList.get(i) * 1 / 3, 0 - stripWidth, heightList.get(i) * 1 / 3, 0);
+                paintScaleLegend.setMargin(heightList.get(i) * 1 / 3, 0, heightList.get(i) * 1 / 3, 0);
                 jFreeChart.addSubtitle(paintScaleLegend);
             }
             jFreeChart.setBackgroundPaint(Color.WHITE);
@@ -290,6 +311,66 @@ public class MCBView {
         // 关闭文档，才能输出
         document.close();
         pdfWriter.close();
+    }
+
+    public void saveAsPng(List<Integer> cpgPosListInRegion, Region region, List<Plot> plotList, String outputPath,
+                          Integer width, List<Integer> heightList) throws IOException {
+        File outFile = new File(outputPath);
+        Integer sumHeight = 0;
+        for (int i = 0; i < heightList.size(); i++) {
+            sumHeight += heightList.get(i);
+        }
+        BufferedImage bufferedImage = new BufferedImage(width, sumHeight, BufferedImage.TYPE_INT_RGB);
+
+        Integer nextHeight = 0;
+        for (int i = 0; i < plotList.size(); i++) {
+            Graphics2D graphics2D = bufferedImage.createGraphics();
+
+            JFreeChart jFreeChart = new JFreeChart("", null, plotList.get(i), false);
+            if (i == 0) {
+                // 图标头
+                jFreeChart = new JFreeChart(region.toHeadString(), new Font("", Font.PLAIN, sumHeight / 50), plotList.get(i), false);
+
+                // 颜色定义
+                LookupPaintScale paintScale = new LookupPaintScale(0, 1, Color.black);
+                for (Double j = 0.0; j < 255.0; j++) {
+                    paintScale.add((255 - j) / 255, new Color((int) (255.0 - j / 3 * 2), (int) (255.0 - j / 3 * 2), j.intValue()));
+                }
+
+                // 颜色示意图
+                PaintScaleLegend paintScaleLegend = new PaintScaleLegend(paintScale, new NumberAxis());
+                paintScaleLegend.setStripWidth(width * 0.01);
+                paintScaleLegend.setPosition(RectangleEdge.RIGHT);
+                paintScaleLegend.setAxisLocation(AxisLocation.BOTTOM_OR_RIGHT);
+                paintScaleLegend.setMargin(heightList.get(i) * 1 / 2, 0, heightList.get(i) * 1 / 4, 0);
+                jFreeChart.addSubtitle(paintScaleLegend);
+            } else if (i == plotList.size() - 1) {
+                // 颜色定义
+                LookupPaintScale paintScale = new LookupPaintScale(-1, 1, Color.black);
+                for (Double j = 0.0; j < 255.0; j++) {
+                    paintScale.add((j - 255) / 255, new Color(j.intValue(), j.intValue(), 255));
+                }
+                for (Double j = 255.0; j < 510.0; j++) {
+                    paintScale.add((j - 255) / 255, new Color(255, 510 - j.intValue(), 510 - j.intValue()));
+                }
+
+                // 颜色示意图
+                PaintScaleLegend paintScaleLegend = new PaintScaleLegend(paintScale, new NumberAxis());
+                paintScaleLegend.setStripWidth(width * 0.01);
+                paintScaleLegend.setPosition(RectangleEdge.RIGHT);
+                paintScaleLegend.setAxisLocation(AxisLocation.BOTTOM_OR_RIGHT);
+                paintScaleLegend.setMargin(heightList.get(i) * 1 / 3, 0, heightList.get(i) * 1 / 3, 0);
+                jFreeChart.addSubtitle(paintScaleLegend);
+            }
+            jFreeChart.setBackgroundPaint(Color.WHITE);
+            Rectangle2D rectangle2D0 = new Rectangle2D.Double(0, nextHeight, width, heightList.get(i));
+            jFreeChart.draw(graphics2D, rectangle2D0);
+            nextHeight += heightList.get(i);
+            graphics2D.dispose();
+        }
+
+        RenderedImage rendImage = bufferedImage;
+        ImageIO.write(rendImage, "png", outFile);
     }
 
 }
