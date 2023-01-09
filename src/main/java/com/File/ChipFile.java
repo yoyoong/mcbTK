@@ -7,9 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.zip.GZIPInputStream;
 
 public class ChipFile {
@@ -43,6 +41,7 @@ public class ChipFile {
         }
 
         // get the data from chip file
+        TabixReader tabixReader = new TabixReader(chipFile.getAbsolutePath());
         TabixReader.Iterator iterator = tabixReader.query(region.getChrom(), region.getStart() - 1, region.getEnd());
         List<ChipInfo> chipInfoList = new ArrayList<>();
         String chipLine = "";
@@ -77,6 +76,36 @@ public class ChipFile {
             chipInfoList.add(chipInfo);
         }
 
+        tabixReader.close();
         return chipInfoList;
+    }
+
+    public Map<String, List<Integer>> getWholeCpgList() throws Exception {
+        TreeMap<String, List<Integer>> cpgPosListMap = new TreeMap<>();
+
+        List<Integer> cpgPosList = new ArrayList<>();
+        String chipLine = tabixReader.readLine();
+        String lastChr = chipLine.split("\t")[0];
+        chipLine = tabixReader.readLine();
+        while(chipLine != null && !chipLine.equals("")) {
+            if (chipLine.split("\t").length < 3) {
+                continue;
+            } else {
+                if (lastChr.equals(chipLine.split("\t")[0])) {
+                    cpgPosList.add(Integer.valueOf(chipLine.split("\t")[1]));
+                } else {
+                    cpgPosListMap.put(lastChr, cpgPosList);
+                    lastChr = chipLine.split("\t")[0];
+                    cpgPosList = new ArrayList<>();
+                    cpgPosList.add(Integer.valueOf(chipLine.split("\t")[1]));
+                }
+                chipLine = tabixReader.readLine();
+            }
+        }
+        cpgPosListMap.put(lastChr, cpgPosList);
+        log.info("Read input file success.");
+
+        tabixReader.close();
+        return cpgPosListMap;
     }
 }

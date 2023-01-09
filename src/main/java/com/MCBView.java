@@ -3,6 +3,7 @@ package com;
 import com.File.ChipFile;
 import com.args.MCBViewArgs;
 import com.bean.ChipInfo;
+import com.bean.RInfo;
 import com.bean.Region;
 import com.common.Util;
 import com.itextpdf.awt.DefaultFontMapper;
@@ -87,8 +88,8 @@ public class MCBView {
                 Double[] dataArray1 = chipInfoList.get(i).getDataArray();
                 Double[] dataArray2 = chipInfoList.get(j).getDataArray();
                 // calculate the r value
-                Double rvalue = util.calculateRvalue(dataArray1, dataArray2, args.getNSample());
-                rvalueMatrix[index] = rvalue;
+                RInfo rInfo = util.calculateRvalue(dataArray1, dataArray2, args.getNSample());
+                rvalueMatrix[index] = rInfo.getRvalue();
                 index++;
             }
         }

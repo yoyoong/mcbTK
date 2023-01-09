@@ -6,6 +6,7 @@ import com.File.StatOutputFile;
 import com.args.RArgs;
 import com.args.StatArgs;
 import com.bean.ChipInfo;
+import com.bean.RInfo;
 import com.bean.Region;
 import com.common.Util;
 import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
@@ -66,15 +67,15 @@ public class R {
                     Double[] dataArray2 = chipInfoList.get(j).getDataArray();
 
                     // calculate the r value
-                    Double rvalue = util.calculateRvalue(dataArray1, dataArray2, args.getNSample());
-                    if (rvalue.isNaN()) {
+                    RInfo rInfo = util.calculateRvalue(dataArray1, dataArray2, args.getNSample());
+                    if (rInfo.getRvalue().isNaN()) {
                         log.info("The count of sample which data is not NA in " + region.getChrom() + "\t" +
                                 cpgPos1 + "\t" + cpgPos2 + " is less than nSample");
                         continue;
                     }
 
                     // write the output file
-                    String line = region.getChrom() + "\t" + cpgPos1 + "\t" + cpgPos2 + "\t" + rvalue + "\n";
+                    String line = region.getChrom() + "\t" + cpgPos1 + "\t" + cpgPos2 + "\t" + rInfo.getRvalue() + "\n";
                     outputFile.writeLine(line);
                 }
             }
