@@ -89,6 +89,10 @@ public class MCBDiscovery {
                     if (index < 0) {
                         break;
                     }
+                    if (cpgPosListInRegion.get(endIndex) - cpgPosListInRegion.get(index) > args.getDistance()) {
+                        extendFlag = false;
+                        break;
+                    }
 
                     // get r2 and pvalue of start array and end array
                     Double[] dataArray1 = chipInfoList.get(startIndex).getDataArray();
