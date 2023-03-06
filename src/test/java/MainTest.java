@@ -36,7 +36,7 @@ public class MainTest extends TestCase {
 //        String arg3 = "-region";
 //        String arg4 = "chr1:28734-29810";
         String arg3 = "-bed";
-        String arg4 = "COAD_DMR.bed";
+        String arg4 = "MCBDiscovery.output.txt";
         String arg5 = "-sampleID";
         String arg6 = "";
         String arg7 = "-nSample";
@@ -98,12 +98,12 @@ public class MainTest extends TestCase {
         String arg11 = "-pvalue";
         String arg12 = "0.05";
         String arg13 = "-window";
-        String arg14 = "3";
+        String arg14 = "2";
         String arg15 = "-distance";
         String arg16 = "1000";
 
-        //String[] args = {arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16};
-        String[] args = {arg0, arg1, arg2, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16};
+        String[] args = {arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16};
+        //String[] args = {arg0, arg1, arg2, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16};
 
         System.out.println("Work direqtory: " + System.getProperty("user.dir"));
         String argsStr = "";

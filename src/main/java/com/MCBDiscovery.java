@@ -95,7 +95,7 @@ public class MCBDiscovery {
                     }
 
                     // get r2 and pvalue of start array and end array
-                    Double[] dataArray1 = chipInfoList.get(startIndex).getDataArray();
+                    Double[] dataArray1 = chipInfoList.get(index).getDataArray();
                     Double[] dataArray2 = chipInfoList.get(endIndex).getDataArray();
                     RInfo rInfo = util.calculateRvalue(dataArray1, dataArray2, args.getNSample());
                     if (rInfo == null || rInfo.getRvalue() < args.getR() || rInfo.getPvalue() > args.getPvalue()) {
