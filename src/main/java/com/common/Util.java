@@ -43,13 +43,16 @@ public class Util {
     public RInfo calculateRvalue(Double[] array1, Double[] array2, Integer nSample) {
         RInfo  rInfo = new RInfo();
         // filter the NaN value
-        double[] dataArray1ForCalculate = new double[array1.length];
-        double[] dataArray2ForCalculate = new double[array2.length];
+        double[] dataArray1 = new double[array1.length];
+        double[] dataArray2 = new double[array2.length];
         int index = 0;
         for (int k = 0; k < array1.length; k++) {
+            if (k == array1.length - 1) {
+                int d = 4;
+            }
             if (!array1[k].isNaN() && !array2[k].isNaN()) {
-                dataArray1ForCalculate[index] = array1[k];
-                dataArray2ForCalculate[index] = array2[k];
+                dataArray1[index] = array1[k];
+                dataArray2[index] = array2[k];
                 index++;
             }
         }
@@ -57,6 +60,8 @@ public class Util {
             rInfo.setRvalue(Double.NaN);
             return rInfo;
         }
+        double[] dataArray1ForCalculate = Arrays.copyOfRange(dataArray1, 0, index);
+        double[] dataArray2ForCalculate = Arrays.copyOfRange(dataArray2, 0, index);
 
         // calculate the pearsons correlation
         PearsonsCorrelation pearsonsCorrelation = new PearsonsCorrelation();

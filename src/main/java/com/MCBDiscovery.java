@@ -9,6 +9,7 @@ import com.bean.MCBInfo;
 import com.bean.RInfo;
 import com.bean.Region;
 import com.common.Util;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,6 +82,7 @@ public class MCBDiscovery {
             Integer startIndex = 0; // start mcb position index in cpgPosListInRegion
             Integer endIndex = 0; // end mcb position index in cpgPosListInRegion
             Integer index = 0;
+            Boolean lastExtendFlag = false;
             while (endIndex < cpgPosListInRegion.size() - 1) {
                 endIndex++;
                 Boolean extendFlag = true;
@@ -98,6 +100,7 @@ public class MCBDiscovery {
                     Double[] dataArray1 = chipInfoList.get(index).getDataArray();
                     Double[] dataArray2 = chipInfoList.get(endIndex).getDataArray();
                     RInfo rInfo = util.calculateRvalue(dataArray1, dataArray2, args.getNSample());
+                    //log.info(cpgPosListInRegion.get(index) + "-" + cpgPosListInRegion.get(endIndex) + ":" + rInfo.getRvalue() + " " + rInfo.getPvalue());
                     if (rInfo == null || rInfo.getRvalue() < args.getR() || rInfo.getPvalue() > args.getPvalue()) {
                         extendFlag = false;
                         break;
@@ -117,23 +120,24 @@ public class MCBDiscovery {
                         outputFile.writeLine(mcbInfo.getChrom() + "\t" + mcbInfo.getStart() + "\t" + mcbInfo.getEnd() + "\n");
                     }
                 }
+                lastExtendFlag = extendFlag;
             }
 
-            if (endIndex - startIndex >= args.getWindow()) {
+            if (lastExtendFlag && (endIndex - startIndex >= args.getWindow() - 1)) {
                 MCBInfo mcbInfo = new MCBInfo();
                 mcbInfo.setChrom(region.getChrom());
                 mcbInfo.setStart(cpgPosListInRegion.get(startIndex));
-                mcbInfo.setEnd(cpgPosListInRegion.get(endIndex - 1));
+                mcbInfo.setEnd(cpgPosListInRegion.get(endIndex));
                 if (!mcbInfoListMap.containsKey(mcbInfo.toString())) {
                     mcbInfoListMap.put(mcbInfo.toString(), mcbInfo.toString());
                     outputFile.writeLine(mcbInfo.getChrom() + "\t" + mcbInfo.getStart() + "\t" + mcbInfo.getEnd() + "\n");
                 }
             }
-            log.info("Get MHB from region: " + region.toHeadString() + " end!");
+            log.info("Get MCB from region: " + region.toHeadString() + " end!");
         }
 
         outputFile.close();
-        log.info("command.mcbDiscovery end!");
+        log.info("command.MCBDiscovery end!");
     }
 
     private boolean checkArgs() {
