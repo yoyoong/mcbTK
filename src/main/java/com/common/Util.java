@@ -47,19 +47,16 @@ public class Util {
         double[] dataArray2 = new double[array2.length];
         int index = 0;
         for (int k = 0; k < array1.length; k++) {
-            if (k == array1.length - 1) {
-                int d = 4;
-            }
             if (!array1[k].isNaN() && !array2[k].isNaN()) {
                 dataArray1[index] = array1[k];
                 dataArray2[index] = array2[k];
                 index++;
             }
         }
-        if (index < nSample) {
-            rInfo.setRvalue(Double.NaN);
-            return rInfo;
-        }
+//        if (index < nSample) {
+//            rInfo.setRvalue(Double.NaN);
+//            return rInfo;
+//        }
         double[] dataArray1ForCalculate = Arrays.copyOfRange(dataArray1, 0, index);
         double[] dataArray2ForCalculate = Arrays.copyOfRange(dataArray2, 0, index);
 
@@ -95,5 +92,30 @@ public class Util {
             regionList.add(region);
         }
         return regionList;
+    }
+
+    public static int[] sortArray(double[] arr) {
+        double temp;
+        int index;
+        int k = arr.length;
+        int[] Index = new int[k];
+        for (int i = 0; i < k; i++) {
+            Index[i] = i;
+        }
+
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = 0; j < arr.length - i - 1; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+
+                    index = Index[j];
+                    Index[j] = Index[j + 1];
+                    Index[j + 1] = index;
+                }
+            }
+        }
+        return Index;
     }
 }

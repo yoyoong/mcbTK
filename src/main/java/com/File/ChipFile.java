@@ -21,6 +21,16 @@ public class ChipFile {
         tabixReader = new TabixReader(chipPath);
     }
 
+    public List<String> getSampleIdList() throws IOException {
+        FileInputStream fileInputStream = new FileInputStream(chipFile.getName());
+        GZIPInputStream gzipInputStream = new GZIPInputStream(fileInputStream);
+        InputStreamReader inputStreamReader = new InputStreamReader(gzipInputStream);
+        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+        String[] chipFirstLineArray = bufferedReader.readLine().split("\t");
+        List<String> sampleIDList = Arrays.asList(chipFirstLineArray).subList(3, chipFirstLineArray.length);
+        return sampleIDList;
+    }
+
     public List<ChipInfo> parseByRegionAndSampleID(Region region, String sampleID) throws IOException {
         // get the sampleID and the sampleID index in all sample from the first line
         List<Integer> sampleIndexList = new ArrayList<>();

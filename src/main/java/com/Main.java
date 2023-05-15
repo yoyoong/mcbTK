@@ -1,9 +1,6 @@
 package com;
 
-import com.args.MCBDiscoveryArgs;
-import com.args.MCBViewArgs;
-import com.args.RArgs;
-import com.args.StatArgs;
+import com.args.*;
 import com.common.Annotation;
 import org.apache.commons.cli.*;
 
@@ -16,6 +13,7 @@ public class Main {
     static R r = new R();
     static MCBDiscovery mcbDiscovery = new MCBDiscovery();
     static MCBView mcbView = new MCBView();
+    static CSN csn = new CSN();
 
     public static void main(String[] args) throws Exception {
         System.setProperty("java.awt.headless", "true");
@@ -40,6 +38,11 @@ public class Main {
                 MCBViewArgs mcbViewArgs = parseMCBView(args);
                 if (mcbViewArgs != null) {
                     mcbView.mcbView(mcbViewArgs);
+                }
+            } else if (args[0].equals("CSN")) {
+                CSNArgs csnArgs = parseCSN(args);
+                if (csnArgs != null) {
+                    csn.csn(csnArgs);
                 }
             } else {
                 System.out.println("unrecognized command:" + args[0]);
@@ -213,5 +216,41 @@ public class Main {
         }
 
         return mcbViewArgs;
+    }
+
+    private static CSNArgs parseCSN(String[] args) throws ParseException {
+        Options options = getOptions(CSNArgs.class.getDeclaredFields());
+        BasicParser parser = new BasicParser();
+        CSNArgs csnArgs = new CSNArgs();
+        CommandLine commandLine = parser.parse(options, args);
+        if (commandLine.getOptions().length > 0) {
+            if (commandLine.hasOption('h')) {
+                HelpFormatter helpFormatter = new HelpFormatter();
+                helpFormatter.printHelp("Options", options);
+                return null;
+            } else {
+                csnArgs.setInput(commandLine.getOptionValue("input"));
+                csnArgs.setBed(commandLine.getOptionValue("bed"));
+                if (commandLine.hasOption("boxSize")) {
+                    csnArgs.setBoxSize(Double.valueOf(commandLine.getOptionValue("boxSize")));
+                }
+                if (commandLine.hasOption("alpha")) {
+                    csnArgs.setAlpha(Double.valueOf(commandLine.getOptionValue("alpha")));
+                }
+                if (commandLine.hasOption("ndmFlag")) {
+                    csnArgs.setNdmFlag(true);
+                }
+                if (commandLine.hasOption("outputDir")) {
+                    csnArgs.setOutputDir(commandLine.getOptionValue("outputDir"));
+                }
+                if (commandLine.hasOption("tag")) {
+                    csnArgs.setTag(commandLine.getOptionValue("tag"));
+                }
+            }
+        } else {
+            System.out.println("The paramter is null");
+        }
+
+        return csnArgs;
     }
 }
