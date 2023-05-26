@@ -213,12 +213,12 @@ public class CSN {
                 if (tempArray[row][col] > level) {
                     csn[row][col] = 1;
                     csn[col][row] = 1;
-                    csnOutputFile.setBarCode(sampleIDList.get(index));
-                    csnOutputFile.setRegion1(regionList.get(row).toHeadString());
-                    csnOutputFile.setRegion2(regionList.get(col).toHeadString());
-                    csnOutputFile.setStatistic(String.valueOf(tempArray[row][col]));
-                    csnOutputFile.writeLine("");
                 }
+                csnOutputFile.setBarCode(sampleIDList.get(index));
+                csnOutputFile.setRegion1(regionList.get(row).toHeadString());
+                csnOutputFile.setRegion2(regionList.get(col).toHeadString());
+                csnOutputFile.setStatistic(String.valueOf(tempArray[row][col]));
+                csnOutputFile.writeLine("");
             }
         }
 

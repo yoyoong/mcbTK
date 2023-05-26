@@ -22,7 +22,7 @@ public class ChipFile {
     }
 
     public List<String> getSampleIdList() throws IOException {
-        FileInputStream fileInputStream = new FileInputStream(chipFile.getName());
+        FileInputStream fileInputStream = new FileInputStream(chipFile.getAbsolutePath());
         GZIPInputStream gzipInputStream = new GZIPInputStream(fileInputStream);
         InputStreamReader inputStreamReader = new InputStreamReader(gzipInputStream);
         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
@@ -35,7 +35,7 @@ public class ChipFile {
         // get the sampleID and the sampleID index in all sample from the first line
         List<Integer> sampleIndexList = new ArrayList<>();
         if (sampleID != null && !sampleID.equals("")) {
-            FileInputStream fileInputStream = new FileInputStream(chipFile.getName());
+            FileInputStream fileInputStream = new FileInputStream(chipFile.getAbsolutePath());
             GZIPInputStream gzipInputStream = new GZIPInputStream(fileInputStream);
             InputStreamReader inputStreamReader = new InputStreamReader(gzipInputStream);
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
