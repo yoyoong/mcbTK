@@ -76,30 +76,45 @@ public class CSN {
         Map<String, double[][]> upperlower = getUpperlower(mmMatrix);
         double[][] upper = upperlower.get("upper");
         double[][] lower = upperlower.get("lower");
-
-        ndmOutputFile = new OutputFile(args.getOutputDir(), args.getTag() + ".NDM.txt");
-        csnOutputFile.writeHead("");
         int[][] ndm = new int[regionList.size()][sampleIDList.size()];
+
+        if (args.isNdmFlag()) {
+            ndmOutputFile = new OutputFile(args.getOutputDir(), args.getTag() + ".NDM.txt");
+            String ndmHead = "";
+            for (int i = 0; i < sampleIDList.size(); i++) {
+                ndmHead += "\t" + sampleIDList.get(i);
+            }
+            ndmOutputFile.writeHead(ndmHead + "\n");
+        }
+
         for (int i = 0; i < sampleIDList.size(); i++) {
             String barcode = sampleIDList.get(i);
             Integer index = sampleIDList.indexOf(barcode);
             int[][] csn = getCSN(mmMatrix, upper, lower, index, csnOutputFile);
 
             if (args.isNdmFlag()) {
-                String ndmRow = "";
                 int[] ndmColumn = Arrays.stream(csn).mapToInt(item -> IntStream.of(item).sum()).toArray();
                 for (int j = 0; j < ndmColumn.length; j++) {
                     ndm[j][i] = ndmColumn[j];
-                    ndmRow += ndmColumn[j] + "\t";
                 }
-                ndmOutputFile.writeLine(ndmRow.trim() + "\n");
             }
 
             log.info("Get csn of barcode:" + barcode + " end.");
         }
-        ndmOutputFile.close();
-        csnOutputFile.close();
 
+        if (args.isNdmFlag()) {
+            for (int i = 0; i < regionList.size(); i++) {
+                String region = regionList.get(i).toHeadString();
+                String ndmRow = region;
+                for (int j = 0; j < sampleIDList.size(); j++) {
+                    ndmRow += "\t" + ndm[i][j];
+                }
+                ndmOutputFile.writeLine(ndmRow.trim() + "\n");
+            }
+            ndmOutputFile.close();
+        }
+
+        csnOutputFile.close();
         log.info("CSN end!");
     }
 

@@ -120,9 +120,9 @@ public class MainTest extends TestCase {
         Main main = new Main();
         String arg0 = "CSN";
         String arg1 = "-input";
-        String arg2 = "/sibcb2/bioinformatics2/zhangtianlu/finalData/TCGAMCBData/COAD/tumor/COADTumorMCB.gz";
+        String arg2 = "COAD.txt.gz";
         String arg3 = "-bed";
-        String arg4 = "/sibcb2/bioinformatics2/zhangtianlu/finalData/TCGAMCBData/COAD/tumor/MCBDiscovery.output.txt";
+        String arg4 = "CRC_MHB111.bed";
         String arg5 = "-boxSize";
         String arg6 = "0.1";
         String arg7 = "-alpha";
