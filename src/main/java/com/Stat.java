@@ -11,6 +11,8 @@ import org.apache.commons.math3.stat.StatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -42,6 +44,15 @@ public class Stat {
             log.info("The region list in bedfile is null, please check!");
         }
 
+        List<String> sampleIdList = new ArrayList<>();
+        if (args.getSampleID() != null && !args.getSampleID().equals("")) {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(args.getSampleID()));
+            String sampleId = "";
+            while ((sampleId = bufferedReader.readLine()) != null && !sampleId.equals("")) {
+                sampleIdList.add(sampleId);
+            }
+        }
+
         // create the output file and write the head
         String outputFileName = "stat.output.txt";
         StatOutputFile outputFile = new StatOutputFile("", outputFileName);
@@ -50,7 +61,7 @@ public class Stat {
 
         for (Region region : regionList) {
             // get the chip methalation data from inputfile
-            List<ChipInfo> chipInfoList = chipFile.parseByRegionAndSampleID(region, args.getSampleID());
+            List<ChipInfo> chipInfoList = chipFile.parseByRegionAndSampleID(region, sampleIdList);
             if (chipInfoList.size() < 1) {
                 log.info("The data list in region: " + region.toHeadString() +  " is null, continue to next region...");
                 continue;

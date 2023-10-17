@@ -31,10 +31,10 @@ public class ChipFile {
         return sampleIDList;
     }
 
-    public List<ChipInfo> parseByRegionAndSampleID(Region region, String sampleID) throws IOException {
+    public List<ChipInfo> parseByRegionAndSampleID(Region region, List<String> sampleIdList) throws IOException {
         // get the sampleID and the sampleID index in all sample from the first line
         List<Integer> sampleIndexList = new ArrayList<>();
-        if (sampleID != null && !sampleID.equals("")) {
+        if (sampleIdList.size() > 0) {
             FileInputStream fileInputStream = new FileInputStream(chipFile.getAbsolutePath());
             GZIPInputStream gzipInputStream = new GZIPInputStream(fileInputStream);
             InputStreamReader inputStreamReader = new InputStreamReader(gzipInputStream);
@@ -42,8 +42,7 @@ public class ChipFile {
             String[] chipFirstLineArray = bufferedReader.readLine().split("\t");
             List<String> sampleIDList = Arrays.asList(chipFirstLineArray).subList(3, chipFirstLineArray.length);
 
-            String[] sampleIDArray = sampleID.split(" ");
-            for (String sample : sampleIDArray) {
+            for (String sample : sampleIdList) {
                 if (sampleIDList.contains(sample)) {
                     sampleIndexList.add(sampleIDList.indexOf(sample));
                 }
@@ -64,23 +63,28 @@ public class ChipFile {
 
             List<String> dataList = Arrays.asList(chipLineArray).subList(3, chipLineArray.length);
             Double[] dataArray;
-            if (sampleID != null && !sampleID.equals("")) {
+            if (sampleIdList.size() > 0) {
                 dataArray = new Double[sampleIndexList.size()];
             } else {
                 dataArray = new Double[dataList.size()];
             }
-            Integer colNum = 0;
-            for (String data : dataList) {
-                if (sampleID != null && !sampleID.equals("")) { // sampleID no null, filter the data
-                    if (sampleIndexList.contains(colNum)) { // only get the data which sampleID index in sampleIndexList
+
+            if (sampleIdList.size() > 0) { // sampleID no null, filter the data
+                Integer colNum = 0;
+                for (int i = 0; i < dataList.size(); i++) {
+                    String data = dataList.get(i);
+                    if (sampleIndexList.contains(i)) {
                         dataArray[colNum] = data.equals("NA") ? Double.NaN : Double.valueOf(data);
+                        colNum++;
                     } else {
                         continue;
                     }
-                } else { // sampleID is null, get all data
-                    dataArray[colNum] = data.equals("NA") ? Double.NaN : Double.valueOf(data);
                 }
-                colNum++;
+            } else { // sampleID is null, get all data
+                for (int i = 0; i < dataList.size(); i++) {
+                    String data = dataList.get(i);
+                    dataArray[i] = data.equals("NA") ? Double.NaN : Double.valueOf(data);
+                }
             }
             chipInfo.setDataArray(dataArray);
             chipInfoList.add(chipInfo);

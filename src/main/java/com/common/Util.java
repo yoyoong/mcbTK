@@ -53,10 +53,10 @@ public class Util {
                 index++;
             }
         }
-//        if (index < nSample) {
-//            rInfo.setRvalue(Double.NaN);
-//            return rInfo;
-//        }
+        if (index < nSample) {
+            rInfo.setRvalue(Double.NaN);
+            return rInfo;
+        }
         double[] dataArray1ForCalculate = Arrays.copyOfRange(dataArray1, 0, index);
         double[] dataArray2ForCalculate = Arrays.copyOfRange(dataArray2, 0, index);
 

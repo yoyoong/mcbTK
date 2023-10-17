@@ -178,6 +178,9 @@ public class Main {
                 if (commandLine.hasOption("distance")) {
                     mcbDiscoveryArgs.setDistance(Integer.valueOf(String.valueOf(commandLine.getOptionValue("distance"))));
                 }
+                if (commandLine.hasOption("output")) {
+                    mcbDiscoveryArgs.setOutput(String.valueOf(commandLine.getOptionValue("output")));
+                }
                 mcbDiscoveryArgs.setNSample(Integer.valueOf(String.valueOf(commandLine.getOptionValue("nSample"))));
             }
         } else {

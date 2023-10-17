@@ -9,7 +9,7 @@ public class MCBDiscoveryArgs implements Serializable {
     public String input = "";
     @Annotation("a BED file")
     public String bed = "";
-    @Annotation("sampleID")
+    @Annotation("input sampleID file, .txt format, one line is a sample ID")
     public String sampleID = "";
     @Annotation("R cutoff")
     public Double R;
@@ -21,6 +21,8 @@ public class MCBDiscoveryArgs implements Serializable {
     public Integer distance;
     @Annotation("minimal number of samples that cover the CpGs for R calculation [20]")
     public Integer nSample = 20;
+    @Annotation("prefix of the output file(s) [MCBDiscovery]")
+    public String output = "MCBDiscovery";
 
     public String getInput() {
         return input;
@@ -84,5 +86,13 @@ public class MCBDiscoveryArgs implements Serializable {
 
     public void setNSample(Integer nSample) {
         this.nSample = nSample;
+    }
+
+    public String getOutput() {
+        return output;
+    }
+
+    public void setOutput(String output) {
+        this.output = output;
     }
 }

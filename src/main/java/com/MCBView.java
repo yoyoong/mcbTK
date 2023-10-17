@@ -59,8 +59,18 @@ public class MCBView {
         ChipFile chipFile = new ChipFile(args.getInput());
         Region region = new Region(args.getRegion());
 
+        // get sample ID list
+        List<String> sampleIdList = new ArrayList<>();
+        if (args.getSampleID() != null && !args.getSampleID().equals("")) {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(args.getSampleID()));
+            String sampleId = "";
+            while ((sampleId = bufferedReader.readLine()) != null && !sampleId.equals("")) {
+                sampleIdList.add(sampleId);
+            }
+        }
+
         // get the chip methalation data from inputfile
-        List<ChipInfo> chipInfoList = chipFile.parseByRegionAndSampleID(region, args.getSampleID());
+        List<ChipInfo> chipInfoList = chipFile.parseByRegionAndSampleID(region, sampleIdList);
         if (chipInfoList.size() < 1) {
             log.info("The data list in region: " + region.toHeadString() +  " is null, return...");
             return;

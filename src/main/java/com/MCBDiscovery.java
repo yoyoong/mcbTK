@@ -13,6 +13,8 @@ import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -64,13 +66,23 @@ public class MCBDiscovery {
         }
 
         // create the output file
-        String outputFileName = "MCBDiscovery.output.txt";
+        String outputFileName = args.getOutput() + ".txt";
         StatOutputFile outputFile = new StatOutputFile("", outputFileName);
+
+        // get sample ID list
+        List<String> sampleIdList = new ArrayList<>();
+        if (args.getSampleID() != null && !args.getSampleID().equals("")) {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(args.getSampleID()));
+            String sampleId = "";
+            while ((sampleId = bufferedReader.readLine()) != null && !sampleId.equals("")) {
+                sampleIdList.add(sampleId);
+            }
+        }
 
         Map<String, String> mcbInfoListMap = new HashMap<>();
         for (Region region : regionList) {
             // get the chip methalation data from inputfile
-            List<ChipInfo> chipInfoList = chipFile.parseByRegionAndSampleID(region, args.getSampleID());
+            List<ChipInfo> chipInfoList = chipFile.parseByRegionAndSampleID(region, sampleIdList);
             if (chipInfoList.size() < 1) {
                 // log.info("The data list in region: " + region.toHeadString() +  " is null, continue to next region...");
                 continue;

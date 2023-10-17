@@ -57,7 +57,7 @@ public class CSN {
             Region region = regionList.get(i);
 
             // get the chip methalation data from inputfile
-            List<ChipInfo> chipInfoList = chipFile.parseByRegionAndSampleID(region, "");
+            List<ChipInfo> chipInfoList = chipFile.parseByRegionAndSampleID(region, new ArrayList<>());
             if (chipInfoList.size() < 1) {
                 log.info("The data list in region: " + region.toHeadString() +  " is null, continue to next region...");
                 continue;
