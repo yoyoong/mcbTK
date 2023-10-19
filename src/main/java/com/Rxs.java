@@ -118,7 +118,6 @@ public class Rxs {
             if (args.getMetrics().contains("var")) {
                 outputFileVar.writeLine(lineStringVar + "\n");
             }
-
         }
         if (args.getMetrics().contains("mean")) {
             outputFileMean.close();

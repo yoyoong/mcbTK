@@ -69,21 +69,24 @@ public class Stat {
                 continue;
             }
 
-            // merge the data arrays of the region
-            Double[] allDataArray = new Double[chipInfoList.size() * chipInfoList.get(0).getDataArray().length];
-            List allDataList = new ArrayList();
-            for (ChipInfo chipInfo : chipInfoList) {
-                allDataList.addAll(Arrays.asList(chipInfo.getDataArray()));
+            // calculate a cpg site metrics value
+            double[] meanArray = new double[chipInfoList.size()];
+            double[] medianArray = new double[chipInfoList.size()];
+            double[] varArray = new double[chipInfoList.size()];
+            for (int i = 0; i < chipInfoList.size(); i++) {
+                Double[] dataArray = chipInfoList.get(i).getDataArray();
+                double[] dataArrayForCalculate = Arrays.stream(dataArray).filter(val -> !val.isNaN()) // filter the invalid data
+                        .mapToDouble(Double::doubleValue).toArray(); // convert Double[] to double[]
+                meanArray[i] = StatUtils.mean(dataArrayForCalculate);
+                medianArray[i] = StatUtils.percentile(dataArrayForCalculate, 50);
+                varArray[i] = StatUtils.variance(dataArrayForCalculate);
             }
-            allDataList.toArray(allDataArray);
 
-            // calculate the metrics
-            double[] allDataArrayForCalculate = Arrays.stream(allDataArray).filter(val -> !val.isNaN()) // filter the invalid data
-                    .mapToDouble(Double::doubleValue).toArray(); // convert Double[] to double[]
+            // calculate the region metrics value
             Integer cov = chipInfoList.size();
-            Double mean = StatUtils.mean(allDataArrayForCalculate);
-            Double median = StatUtils.percentile(allDataArrayForCalculate, 50);
-            Double var = StatUtils.variance(allDataArrayForCalculate);
+            Double mean = StatUtils.mean(meanArray);
+            Double median = StatUtils.mean(medianArray);
+            Double var = StatUtils.mean(varArray);
 
             // write the output file
             String lineString = region.getChrom() + "\t" + region.getStart() + "\t" + region.getEnd() + "\t" + cov;
