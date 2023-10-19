@@ -14,6 +14,7 @@ public class Main {
     static MCBDiscovery mcbDiscovery = new MCBDiscovery();
     static MCBView mcbView = new MCBView();
     static CSN csn = new CSN();
+    static Rxs rxs = new Rxs();
 
     public static void main(String[] args) throws Exception {
         System.setProperty("java.awt.headless", "true");
@@ -43,6 +44,11 @@ public class Main {
                 CSNArgs csnArgs = parseCSN(args);
                 if (csnArgs != null) {
                     csn.csn(csnArgs);
+                }
+            } if (args[0].equals("rxs")) {
+                RxsArgs rxsArgs = parseRxs(args);
+                if (rxsArgs != null) {
+                    rxs.rxs(rxsArgs);
                 }
             } else {
                 System.out.println("unrecognized command:" + args[0]);
@@ -107,9 +113,12 @@ public class Main {
                 statArgs.setInput(commandLine.getOptionValue("input"));
                 statArgs.setBed(commandLine.getOptionValue("bed"));
                 if (commandLine.hasOption("sampleID")) {
-                    statArgs.setSampleID(getStringFromMultiValueParameter(commandLine, "sampleID"));
+                    statArgs.setSampleID(commandLine.getOptionValue("sampleID"));
                 }
                 statArgs.setMetrics(getStringFromMultiValueParameter(commandLine, "metrics"));
+                if (commandLine.hasOption("output")) {
+                    statArgs.setOutput(String.valueOf(commandLine.getOptionValue("output")));
+                }
             }
         } else {
             System.out.println("The parameter is null");
@@ -138,9 +147,14 @@ public class Main {
                     rArgs.setRegion(commandLine.getOptionValue("region"));
                 }
                 if (commandLine.hasOption("sampleID")) {
-                    rArgs.setSampleID(getStringFromMultiValueParameter(commandLine, "sampleID"));
+                    rArgs.setSampleID(commandLine.getOptionValue("sampleID"));
                 }
-                rArgs.setNSample(Integer.valueOf(String.valueOf(commandLine.getOptionValue("nSample"))));
+                if (commandLine.hasOption("nSample")) {
+                    rArgs.setNSample(Integer.valueOf(String.valueOf(commandLine.getOptionValue("nSample"))));
+                }
+                if (commandLine.hasOption("output")) {
+                    rArgs.setOutput(String.valueOf(commandLine.getOptionValue("output")));
+                }
             }
         } else {
             System.out.println("The parameter is null");
@@ -164,7 +178,7 @@ public class Main {
                 mcbDiscoveryArgs.setInput(commandLine.getOptionValue("input"));
                 mcbDiscoveryArgs.setBed(commandLine.getOptionValue("bed"));
                 if (commandLine.hasOption("sampleID")) {
-                    mcbDiscoveryArgs.setSampleID(getStringFromMultiValueParameter(commandLine, "sampleID"));
+                    mcbDiscoveryArgs.setSampleID(commandLine.getOptionValue("sampleID"));
                 }
                 if (commandLine.hasOption("R")) {
                     mcbDiscoveryArgs.setR(Double.valueOf(String.valueOf(commandLine.getOptionValue("R"))));
@@ -255,5 +269,34 @@ public class Main {
         }
 
         return csnArgs;
+    }
+
+    private static RxsArgs parseRxs(String[] args) throws ParseException {
+        Options options = getOptions(RxsArgs.class.getDeclaredFields());
+
+        BasicParser parser = new BasicParser();
+        RxsArgs rxsArgs = new RxsArgs();
+        CommandLine commandLine = parser.parse(options, args);
+        if (commandLine.getOptions().length > 0) {
+            if (commandLine.hasOption('h')) {
+                HelpFormatter helpFormatter = new HelpFormatter();
+                helpFormatter.printHelp("Options", options);
+                return null;
+            } else {
+                rxsArgs.setInput(commandLine.getOptionValue("input"));
+                rxsArgs.setBed(commandLine.getOptionValue("bed"));
+                if (commandLine.hasOption("sampleID")) {
+                    rxsArgs.setSampleID(commandLine.getOptionValue("sampleID"));
+                }
+                rxsArgs.setMetrics(getStringFromMultiValueParameter(commandLine, "metrics"));
+                if (commandLine.hasOption("output")) {
+                    rxsArgs.setOutput(String.valueOf(commandLine.getOptionValue("output")));
+                }
+            }
+        } else {
+            System.out.println("The parameter is null");
+        }
+
+        return rxsArgs;
     }
 }

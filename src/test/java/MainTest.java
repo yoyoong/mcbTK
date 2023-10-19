@@ -8,14 +8,14 @@ public class MainTest extends TestCase {
         Main main = new Main();
         String arg0 = "stat";
         String arg1 = "-input";
-        String arg2 = "COAD.txt.gz";
+        String arg2 = "COAD_T.gz";
         String arg3 = "-bed";
         String arg4 = "CRC_MHB111.bed";
         String arg5 = "-sampleID";
-        String arg6 = "";
+        String arg6 = "sampleID_T.txt";
         String arg7 = "-metrics";
         String arg8 = "mean median var";
-        String[] args = {arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8};
+        String[] args = {arg0, arg1, arg2, arg3, arg4, arg7, arg8};
 
         System.out.println("Work direqtory: " + System.getProperty("user.dir"));
         String argsStr = "";
@@ -136,6 +136,32 @@ public class MainTest extends TestCase {
         String arg13 = "CSN";
 
         String[] args = {arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13};
+        System.out.println("Work direqtory: " + System.getProperty("user.dir"));
+        String argsStr = "";
+        for (int i = 0; i < args.length; i++) {
+            argsStr += args[i] + " ";
+        }
+        System.out.println(argsStr);
+
+        main.main(args);
+    }
+
+    @Test
+    public void test_rxs() throws Exception {
+        Main main = new Main();
+        String arg0 = "rxs";
+        String arg1 = "-input";
+        String arg2 = "COAD_T.gz";
+        String arg3 = "-bed";
+        String arg4 = "CRC_MHB111.bed";
+        String arg5 = "-sampleID";
+        String arg6 = "sampleID_T.txt";
+        String arg7 = "-metrics";
+        String arg8 = "mean median";
+        String arg9 = "-output";
+        String arg10 = "test";
+        String[] args = {arg0, arg1, arg2, arg3, arg4, arg7, arg8, arg9, arg10};
+
         System.out.println("Work direqtory: " + System.getProperty("user.dir"));
         String argsStr = "";
         for (int i = 0; i < args.length; i++) {

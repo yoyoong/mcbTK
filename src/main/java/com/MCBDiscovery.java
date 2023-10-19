@@ -77,6 +77,8 @@ public class MCBDiscovery {
             while ((sampleId = bufferedReader.readLine()) != null && !sampleId.equals("")) {
                 sampleIdList.add(sampleId);
             }
+        } else {
+            sampleIdList = chipFile.getSampleIdList();
         }
 
         Map<String, String> mcbInfoListMap = new HashMap<>();

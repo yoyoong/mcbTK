@@ -51,12 +51,14 @@ public class Stat {
             while ((sampleId = bufferedReader.readLine()) != null && !sampleId.equals("")) {
                 sampleIdList.add(sampleId);
             }
+        } else {
+            sampleIdList = chipFile.getSampleIdList();
         }
 
         // create the output file and write the head
-        String outputFileName = "stat.output.txt";
+        String outputFileName = args.getOutput() + ".txt";
         StatOutputFile outputFile = new StatOutputFile("", outputFileName);
-        String headString = "chrom\t" + "start\t" + "end\t" + args.getMetrics();
+        String headString = "chrom\t" + "start\t" + "end\t" + "cov\t" + args.getMetrics();
         outputFile.writeHead(headString);
 
         for (Region region : regionList) {
@@ -78,12 +80,13 @@ public class Stat {
             // calculate the metrics
             double[] allDataArrayForCalculate = Arrays.stream(allDataArray).filter(val -> !val.isNaN()) // filter the invalid data
                     .mapToDouble(Double::doubleValue).toArray(); // convert Double[] to double[]
+            Integer cov = chipInfoList.size();
             Double mean = StatUtils.mean(allDataArrayForCalculate);
             Double median = StatUtils.percentile(allDataArrayForCalculate, 50);
             Double var = StatUtils.variance(allDataArrayForCalculate);
 
             // write the output file
-            String lineString = region.getChrom() + "\t" + region.getStart() + "\t" + region.getEnd();
+            String lineString = region.getChrom() + "\t" + region.getStart() + "\t" + region.getEnd() + "\t" + cov;
             if (args.getMetrics().contains("mean")) {
                 lineString += "\t" + mean;
             }
@@ -101,15 +104,15 @@ public class Stat {
     }
 
     private boolean checkArgs() {
-        if (args.getInput().equals("")) {
+        if (args.getInput() == null || args.getInput().equals("")) {
             log.error("input can not be null.");
             return false;
         }
-        if (args.getBed().equals("")) {
+        if (args.getBed() == null || args.getBed().equals("")) {
             log.error("bed can not be null.");
             return false;
         }
-        if (args.getMetrics().equals("")) {
+        if (args.getMetrics() == null || args.getMetrics().equals("")) {
             log.error("metrics can not be null.");
             return false;
         }

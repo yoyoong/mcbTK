@@ -67,6 +67,8 @@ public class MCBView {
             while ((sampleId = bufferedReader.readLine()) != null && !sampleId.equals("")) {
                 sampleIdList.add(sampleId);
             }
+        } else {
+            sampleIdList = chipFile.getSampleIdList();
         }
 
         // get the chip methalation data from inputfile
@@ -125,11 +127,11 @@ public class MCBView {
     }
 
     private boolean checkArgs() {
-        if (args.getInput().equals("")) {
+        if (args.getInput() == null || args.getInput().equals("")) {
             log.error("input can not be null.");
             return false;
         }
-        if (args.getRegion().equals("")) {
+        if (args.getRegion() == null || args.getRegion().equals("")) {
             log.error("region can not be null.");
             return false;
         }

@@ -15,6 +15,8 @@ public class RArgs implements Serializable {
     public String region = "";
     @Annotation("minimal number of samples that cover the CpGs for R calculation [20]")
     public Integer nSample = 20;
+    @Annotation("prefix of the output file(s) [R]")
+    public String output = "R";
 
     public String getInput() {
         return input;
@@ -54,5 +56,13 @@ public class RArgs implements Serializable {
 
     public void setNSample(Integer nSample) {
         this.nSample = nSample;
+    }
+
+    public String getOutput() {
+        return output;
+    }
+
+    public void setOutput(String output) {
+        this.output = output;
     }
 }

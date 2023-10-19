@@ -62,28 +62,16 @@ public class ChipFile {
             chipInfo.setEnd(Integer.valueOf(chipLineArray[2]));
 
             List<String> dataList = Arrays.asList(chipLineArray).subList(3, chipLineArray.length);
-            Double[] dataArray;
-            if (sampleIdList.size() > 0) {
-                dataArray = new Double[sampleIndexList.size()];
-            } else {
-                dataArray = new Double[dataList.size()];
-            }
+            Double[] dataArray = new Double[sampleIndexList.size()];
 
-            if (sampleIdList.size() > 0) { // sampleID no null, filter the data
-                Integer colNum = 0;
-                for (int i = 0; i < dataList.size(); i++) {
-                    String data = dataList.get(i);
-                    if (sampleIndexList.contains(i)) {
-                        dataArray[colNum] = data.equals("NA") ? Double.NaN : Double.valueOf(data);
-                        colNum++;
-                    } else {
-                        continue;
-                    }
-                }
-            } else { // sampleID is null, get all data
-                for (int i = 0; i < dataList.size(); i++) {
-                    String data = dataList.get(i);
-                    dataArray[i] = data.equals("NA") ? Double.NaN : Double.valueOf(data);
+            Integer colNum = 0;
+            for (int i = 0; i < dataList.size(); i++) {
+                String data = dataList.get(i);
+                if (sampleIndexList.contains(i)) {
+                    dataArray[colNum] = data.equals("NA") ? Double.NaN : Double.valueOf(data);
+                    colNum++;
+                } else {
+                    continue;
                 }
             }
             chipInfo.setDataArray(dataArray);

@@ -57,10 +57,12 @@ public class R {
             while ((sampleId = bufferedReader.readLine()) != null && !sampleId.equals("")) {
                 sampleIdList.add(sampleId);
             }
+        } else {
+            sampleIdList = chipFile.getSampleIdList();
         }
 
         // create the output file and write the head
-        String outputFileName = "R.output.txt";
+        String outputFileName = args.getOutput() + ".txt";
         StatOutputFile outputFile = new StatOutputFile("", outputFileName);
 
         for (Region region : regionList) {
@@ -98,7 +100,7 @@ public class R {
     }
 
     private boolean checkArgs() {
-        if (args.getInput().equals("")) {
+        if (args.getInput() == null || args.getInput().equals("")) {
             log.error("input can not be null.");
             return false;
         }

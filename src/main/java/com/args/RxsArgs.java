@@ -4,7 +4,7 @@ import com.common.Annotation;
 
 import java.io.Serializable;
 
-public class StatArgs implements Serializable {
+public class RxsArgs implements Serializable {
     @Annotation("input file")
     public String input = "";
     @Annotation("a BED file")
@@ -13,8 +13,8 @@ public class StatArgs implements Serializable {
     public String sampleID = "";
     @Annotation("stat metrics, including mean, median, var")
     public String metrics = "";
-    @Annotation("prefix of the output file(s) [Stat]")
-    public String output = "Stat";
+    @Annotation("prefix of the output file(s) [Rxs]")
+    public String output = "Rxs";
 
     public String getInput() {
         return input;
