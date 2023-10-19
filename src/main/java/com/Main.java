@@ -219,13 +219,16 @@ public class Main {
                 mcbViewArgs.setInput(commandLine.getOptionValue("input"));
                 mcbViewArgs.setRegion(commandLine.getOptionValue("region"));
                 if (commandLine.hasOption("sampleID")) {
-                    mcbViewArgs.setSampleID(getStringFromMultiValueParameter(commandLine, "sampleID"));
+                    mcbViewArgs.setSampleID(commandLine.getOptionValue("sampleID"));
                 }
                 if (commandLine.hasOption("nSample")) {
                     mcbViewArgs.setNSample(Integer.valueOf(String.valueOf(commandLine.getOptionValue("nSample"))));
                 }
                 if (commandLine.hasOption("outFormat")) {
                     mcbViewArgs.setOutFormat(getStringFromMultiValueParameter(commandLine, "outFormat"));
+                }
+                if (commandLine.hasOption("output")) {
+                    mcbViewArgs.setOutput(String.valueOf(commandLine.getOptionValue("output")));
                 }
             }
         } else {

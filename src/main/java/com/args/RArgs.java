@@ -9,7 +9,7 @@ public class RArgs implements Serializable {
     public String input = "";
     @Annotation("a BED file")
     public String bed = "";
-    @Annotation("sampleID")
+    @Annotation("input sampleID file, .txt format, one line is a sample ID")
     public String sampleID = "";
     @Annotation("one region, in the format of chr:start-end")
     public String region = "";

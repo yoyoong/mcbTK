@@ -115,7 +115,12 @@ public class MCBView {
         List<Integer> heightList = new ArrayList<>();
         heightList.add(width * 2 / 3);
         heightList.add(width / 3);
-        String outputPath = region.toFileString() + ".mcbView." + args.getOutFormat();
+        String outputPath = "";
+        if (args.getOutput() != null && !args.getOutput().equals("")) {
+            outputPath = args.getOutput() + "." + args.getOutFormat();
+        } else {
+            outputPath = region.toFileString() + "." + args.getOutFormat();
+        }
         if (args.getOutFormat().equals("pdf")) {
             saveAsPdf(cpgPosListInRegion, region, plotList, outputPath, width, heightList);
         } else if (args.getOutFormat().equals("png")) {

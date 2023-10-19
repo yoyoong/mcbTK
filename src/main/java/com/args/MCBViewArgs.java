@@ -9,12 +9,14 @@ public class MCBViewArgs implements Serializable {
     public String input = "";
     @Annotation("one region, in the format of chr:start-end")
     public String region = "";
-    @Annotation("sampleID")
+    @Annotation("input sampleID file, .txt format, one line is a sample ID")
     public String sampleID = "";
     @Annotation("minimal number of samples that cover the CpGs for R calculation [20]")
     public Integer nSample = 20;
     @Annotation("output format,pdf or png [pdf]")
     public String outFormat = "pdf"; // output format,pdf or png [pdf]
+    @Annotation("prefix of the output file(s)")
+    public String output = "";
 
     public String getInput() {
         return input;
@@ -54,5 +56,13 @@ public class MCBViewArgs implements Serializable {
 
     public void setOutFormat(String outFormat) {
         this.outFormat = outFormat;
+    }
+
+    public String getOutput() {
+        return output;
+    }
+
+    public void setOutput(String output) {
+        this.output = output;
     }
 }
