@@ -54,8 +54,7 @@ public class Util {
             }
         }
         if (index < nSample) {
-            rInfo.setRvalue(Double.NaN);
-            return rInfo;
+            return null;
         }
         double[] dataArray1ForCalculate = Arrays.copyOfRange(dataArray1, 0, index);
         double[] dataArray2ForCalculate = Arrays.copyOfRange(dataArray2, 0, index);
