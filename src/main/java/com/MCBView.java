@@ -79,7 +79,7 @@ public class MCBView {
         }
 
         // get the cpg postion in region
-        List<Integer> cpgPosListInRegion = util.getCpgPosListInRegion(chipInfoList, region);
+        List<Integer> cpgPosListInRegion = util.getCpgPosListInRegion(chipInfoList);
 
         // generate the heat plot
         Integer rowNum = chipInfoList.get(0).getDataArray().length;

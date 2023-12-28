@@ -171,4 +171,37 @@ public class MainTest extends TestCase {
 
         main.main(args);
     }
+
+    @Test
+    public void test_VMRDiscovery() throws Exception {
+        Main main = new Main();
+        String arg0 = "VMRDiscovery";
+        String arg1 = "-input";
+        String arg2 = "COAD_T.gz";
+        // String arg3 = "-bed";
+        // String arg4 = "CRC_MHB.bed";
+        // String arg5 = "-sampleID";
+        // String arg6 = "sampleID_T.txt";
+        String arg7 = "-nSample";
+        String arg8 = "0";
+        String arg9 = "-percentile";
+        String arg10 = "95";
+        String arg11 = "-distance";
+        String arg12 = "1000";
+        String arg13 = "-rate";
+        String arg14 = "0.5";
+        String arg15 = "-output";
+        String arg16 = "test";
+
+        String[] args = {arg0, arg1, arg2, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16};
+
+        System.out.println("Work direqtory: " + System.getProperty("user.dir"));
+        String argsStr = "";
+        for (int i = 0; i < args.length; i++) {
+            argsStr += args[i] + " ";
+        }
+        System.out.println(argsStr);
+
+        main.main(args);
+    }
 }

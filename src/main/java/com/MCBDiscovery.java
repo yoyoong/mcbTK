@@ -91,7 +91,7 @@ public class MCBDiscovery {
             }
 
             // get the cpg postion in region
-            List<Integer> cpgPosListInRegion = util.getCpgPosListInRegion(chipInfoList, region);
+            List<Integer> cpgPosListInRegion = util.getCpgPosListInRegion(chipInfoList);
 
             Integer startIndex = 0; // start mcb position index in cpgPosListInRegion
             Integer endIndex = 0; // end mcb position index in cpgPosListInRegion

@@ -15,6 +15,7 @@ public class Main {
     static MCBView mcbView = new MCBView();
     static CSN csn = new CSN();
     static Rxs rxs = new Rxs();
+    static VMRDiscovery vmrDiscovery = new VMRDiscovery();
 
     public static void main(String[] args) throws Exception {
         System.setProperty("java.awt.headless", "true");
@@ -45,10 +46,15 @@ public class Main {
                 if (csnArgs != null) {
                     csn.csn(csnArgs);
                 }
-            } if (args[0].equals("rxs")) {
+            } else if (args[0].equals("rxs")) {
                 RxsArgs rxsArgs = parseRxs(args);
                 if (rxsArgs != null) {
                     rxs.rxs(rxsArgs);
+                }
+            } else if (args[0].equals("VMRDiscovery")) {
+                VMRDiscoveryArgs vmrDiscoveryArgs = parseVMRDiscovery(args);
+                if (vmrDiscoveryArgs != null) {
+                    vmrDiscovery.vmrDiscovery(vmrDiscoveryArgs);
                 }
             } else {
                 System.out.println("unrecognized command:" + args[0]);
@@ -301,5 +307,43 @@ public class Main {
         }
 
         return rxsArgs;
+    }
+
+    private static VMRDiscoveryArgs parseVMRDiscovery(String[] args) throws ParseException {
+        Options options = getOptions(VMRDiscoveryArgs.class.getDeclaredFields());
+
+        BasicParser parser = new BasicParser();
+        VMRDiscoveryArgs vmrDiscoveryArgs = new VMRDiscoveryArgs();
+        CommandLine commandLine = parser.parse(options, args);
+        if (commandLine.getOptions().length > 0) {
+            if (commandLine.hasOption('h')) {
+                HelpFormatter helpFormatter = new HelpFormatter();
+                helpFormatter.printHelp("Options", options);
+                return null;
+            } else {
+                vmrDiscoveryArgs.setInput(commandLine.getOptionValue("input"));
+                vmrDiscoveryArgs.setBed(commandLine.getOptionValue("bed"));
+                if (commandLine.hasOption("sampleID")) {
+                    vmrDiscoveryArgs.setSampleID(commandLine.getOptionValue("sampleID"));
+                }
+                if (commandLine.hasOption("level")) {
+                    vmrDiscoveryArgs.setPercentile(Integer.valueOf(String.valueOf(commandLine.getOptionValue("percentile"))));
+                }
+                if (commandLine.hasOption("distance")) {
+                    vmrDiscoveryArgs.setDistance(Integer.valueOf(String.valueOf(commandLine.getOptionValue("distance"))));
+                }
+                if (commandLine.hasOption("rate")) {
+                    vmrDiscoveryArgs.setRate(Double.valueOf(String.valueOf(commandLine.getOptionValue("rate"))));
+                }
+                if (commandLine.hasOption("output")) {
+                    vmrDiscoveryArgs.setOutput(String.valueOf(commandLine.getOptionValue("output")));
+                }
+                vmrDiscoveryArgs.setnSample(Integer.valueOf(String.valueOf(commandLine.getOptionValue("nSample"))));
+            }
+        } else {
+            System.out.println("The parameter is null");
+        }
+
+        return vmrDiscoveryArgs;
     }
 }

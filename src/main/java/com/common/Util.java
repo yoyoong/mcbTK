@@ -32,7 +32,7 @@ public class Util {
         return -1;
     }
 
-    public List<Integer> getCpgPosListInRegion(List<ChipInfo> chipInfoList, Region region) {
+    public List<Integer> getCpgPosListInRegion(List<ChipInfo> chipInfoList) {
         List<Integer> cpgPosListInRegion = new ArrayList<>();
         for (ChipInfo chipInfo : chipInfoList) {
             cpgPosListInRegion.add(chipInfo.getStart());
