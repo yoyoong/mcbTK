@@ -13,7 +13,7 @@ public class VMRDiscoveryArgs implements Serializable {
     public String sampleID = "";
     @Annotation("SD percentile cutoff, input 0-100 [95]")
     public Integer percentile = 95;
-    @Annotation("maximum distance of VMR region [1000]")
+    @Annotation("maximum distance of two adjacent cpg sites which >= SD percentile cutoff")
     public Integer distance = 1000;
     @Annotation("rate cutoff of cpg sites meeting the significance level [0.5]")
     public Double rate = 0.5;

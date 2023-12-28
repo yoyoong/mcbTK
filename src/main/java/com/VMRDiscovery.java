@@ -104,58 +104,57 @@ public class VMRDiscovery {
                 }
             }
 
+            int yesNum = 0;
+            Integer lastYesPos = 0;
+            Integer thisYesPos = 0;
+            List<Integer> distanceList = new ArrayList<Integer>();
+            List<Integer> yesIndexList = new ArrayList<Integer>();
+            for (int i = 0; i < statusArray.length - 1; i++) {
+                if (statusArray[i] == 1) {
+                    if (yesNum == 0) {
+                        lastYesPos = cpgPosListInRegion.get(i);
+                    } else {
+                        thisYesPos = cpgPosListInRegion.get(i);
+                        Integer distance = thisYesPos - lastYesPos;
+                        distanceList.add(distance);
+                        lastYesPos = thisYesPos;
+                    }
+                    yesIndexList.add(i);
+                    yesNum++;
+                }
+            }
+
             Integer startIndex = 0; // start VMR position index
             Integer endIndex = 1; // end VMR position index
-            while (endIndex < cpgPosListInRegion.size() - 1) {
-                if (statusArray[startIndex] == 1) {
-                    while (((cpgPosListInRegion.get(endIndex) - cpgPosListInRegion.get(startIndex))
-                            <= args.getDistance()) && (endIndex < cpgPosListInRegion.size() - 1)) {
+            Integer distance_index = 0;
+            while (distance_index < distanceList.size() - 1) {
+                if (distanceList.get(distance_index) <= args.getDistance()) {
+                    startIndex = distance_index;
+                    endIndex = startIndex + 1;
+                    while (endIndex < distanceList.size() - 1) {
+                        if (distanceList.get(endIndex) > args.getDistance()) {
+                            break;
+                        }
                         endIndex++;
                     }
-                    if (cpgPosListInRegion.get(endIndex) - cpgPosListInRegion.get(startIndex) > args.getDistance()) {
-                        endIndex--;
-                    }
-                    while ((statusArray[endIndex] == 0) && (endIndex > startIndex)) {
-                        endIndex--;
-                    }
-                    if (startIndex.equals(1167)) {
-                        int i = 0;
-                    }
 
-                    if (startIndex.equals(endIndex)) {
-                        startIndex++;
-                        endIndex = startIndex + 1;
-                    } else {
-                        int[] statusArrayInWindow = Arrays.copyOfRange(statusArray, startIndex, endIndex + 1);
-                        double yesNum = 0.0;
-                        for (int i = 0; i <= statusArrayInWindow.length - 1; i++) {
-                            if (statusArrayInWindow[i] == 1) {
-                                yesNum++;
-                            }
-                        }
-                        double yesRate = yesNum / statusArrayInWindow.length;
-                        if (yesNum >= 3 && (yesRate >= args.getRate())) {
-                            outputFile.writeLine(region.getChrom() + "\t" + cpgPosListInRegion.get(startIndex) + "\t" + cpgPosListInRegion.get(endIndex) + "\n");
-                            // log.info(cpgPosListInRegion.get(startIndex) + "(index: " + startIndex + ")-" + cpgPosListInRegion.get(endIndex) + "(index: " + endIndex + ")");
-                            // start index to next status1
-                            startIndex++;
-                            while ((startIndex < cpgPosListInRegion.size() - 1) && (statusArray[startIndex] == 0)) {
-                                startIndex++;
-                            }
-                            endIndex = startIndex + 1;
-                            endIndex = startIndex + 1;
-                        } else {
-                            // start index to next status1
-                            startIndex++;
-                            while ((startIndex < cpgPosListInRegion.size() - 1) && (statusArray[startIndex] == 0)) {
-                                startIndex++;
-                            }
-                            endIndex = startIndex + 1;
+                    Integer vmrStartIndex = yesIndexList.get(startIndex);
+                    Integer vmrEndIndex = yesIndexList.get(endIndex);
+                    int[] statusArrayInWindow = Arrays.copyOfRange(statusArray, vmrStartIndex, vmrEndIndex + 1);
+                    double windowYesNum = 0.0;
+                    for (int i = 0; i <= statusArrayInWindow.length - 1; i++) {
+                        if (statusArrayInWindow[i] == 1) {
+                            windowYesNum++;
                         }
                     }
+                    double yesRate = windowYesNum / statusArrayInWindow.length;
+                    if (windowYesNum >= 3 && (yesRate >= args.getRate())) {
+                        outputFile.writeLine(region.getChrom() + "\t" + cpgPosListInRegion.get(vmrStartIndex) +
+                                "\t" + cpgPosListInRegion.get(vmrEndIndex) + "\n");
+                    }
+                    distance_index = endIndex;
                 } else {
-                    startIndex++;
-                    endIndex = startIndex + 1;
+                    distance_index++;
                 }
             }
 
