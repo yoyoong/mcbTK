@@ -201,7 +201,9 @@ public class Main {
                 if (commandLine.hasOption("output")) {
                     mcbDiscoveryArgs.setOutput(String.valueOf(commandLine.getOptionValue("output")));
                 }
-                mcbDiscoveryArgs.setNSample(Integer.valueOf(String.valueOf(commandLine.getOptionValue("nSample"))));
+                if (commandLine.hasOption("nSample")) {
+                    mcbDiscoveryArgs.setNSample(Integer.valueOf(String.valueOf(commandLine.getOptionValue("nSample"))));
+                }
             }
         } else {
             System.out.println("The parameter is null");
@@ -338,7 +340,9 @@ public class Main {
                 if (commandLine.hasOption("output")) {
                     vmrDiscoveryArgs.setOutput(String.valueOf(commandLine.getOptionValue("output")));
                 }
-                vmrDiscoveryArgs.setnSample(Integer.valueOf(String.valueOf(commandLine.getOptionValue("nSample"))));
+                if (commandLine.hasOption("nSample")) {
+                    vmrDiscoveryArgs.setnSample(Integer.valueOf(String.valueOf(commandLine.getOptionValue("nSample"))));
+                }
             }
         } else {
             System.out.println("The parameter is null");
