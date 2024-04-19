@@ -130,7 +130,7 @@ public class MCBDiscovery {
                     startIndex = index + 1 > startIndex ? index + 1 : startIndex;
                     if (mcbSize >= args.getWindow() && !mcbInfoListMap.containsKey(mcbInfo.toString())) {
                         mcbInfoListMap.put(mcbInfo.toString(), mcbInfo.toString());
-                        //log.info("discovery a mhb in : " + mhbInfo.getChrom() + ":" + mhbInfo.getStart() + "-" + mhbInfo.getEnd());
+                        log.info("discovery a mhb in : " + mcbInfo.getChrom() + ":" + mcbInfo.getStart() + "-" + mcbInfo.getEnd());
                         outputFile.writeLine(mcbInfo.getChrom() + "\t" + mcbInfo.getStart() + "\t" + mcbInfo.getEnd() + "\n");
                     }
                 }
@@ -147,7 +147,7 @@ public class MCBDiscovery {
                     outputFile.writeLine(mcbInfo.getChrom() + "\t" + mcbInfo.getStart() + "\t" + mcbInfo.getEnd() + "\n");
                 }
             }
-            log.info("Get MCB from region: " + region.toHeadString() + " end!");
+            // log.info("Get MCB from region: " + region.toHeadString() + " end!");
         }
 
         outputFile.close();
